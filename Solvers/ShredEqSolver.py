@@ -19,7 +19,6 @@ class ShredEqSolver:
         for i in range(1, WP.nx - 1):
             H[i, i-1] = H[i, i+1] = a
             H[i, i] = 2 * a * potential.get_potential(WP.dx * (i - WP.nx/2))
-            print(potential.get_potential(WP.dx * (i - WP.nx/2)))
 
         H[0, 0] = 2 * a * potential.get_potential(WP.dx * (-WP.nx/2))
         H[-1, -1] = 2 * a * potential.get_potential(WP.dx * WP.nx/2)

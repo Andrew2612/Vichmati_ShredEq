@@ -1,10 +1,10 @@
 from typing import List
-from Models.world_parametrs import WorldParameters
+from Models.world_parametrs import WorldParameters as WP
 
 
 class PositionedPit:
     depth: float          # pit depth
-    length: float             # delta oit length
+    length: float         # pit length
     x: float              # pit position
 
     def __init__(self, depth, x, length):
@@ -26,11 +26,11 @@ class Potential:
 
         pits = sorted(pits, key=lambda pit: pit.x)
 
-        if abs(pits[0].x) > WorldParameters.dx * WorldParameters.nx/2:
+        if abs(pits[0].x) > WP.dx * (WP.nx / 2 - 1):
             raise Exception('Pit is positioned out of world')
 
         for i in range(1, len(pits)):
-            if abs(pits[i].x) > WorldParameters.dx * WorldParameters.nx / 2:
+            if abs(pits[i].x) > WP.dx * (WP.nx / 2 - 1):
                 raise Exception('Pit is positioned out of world')
 
             if pits[i].x - pits[i].length/2 < pits[i-1].x + pits[i-1].length/2:
@@ -39,7 +39,7 @@ class Potential:
         return pits
 
     def get_potential(self, x: float) -> float:
-        if abs(x) > WorldParameters.dx * (WorldParameters.nx/2 - 1):
+        if abs(x) > WP.dx * (WP.nx/2 - 1):
             return 1e15
 
         for i, pit in enumerate(self.pits):
