@@ -8,6 +8,7 @@ potential = Potential(pits=[])
 
 from Models.hamiltonian import Hamiltonian
 from Models.single_particle import SingleParticle
+from Visualization.abstract_visualization import init_visualization
 
 def harmonic_oscillator(particle):
     k = 100 * WP.eV / WP.Å**2
@@ -21,6 +22,9 @@ H = Hamiltonian(particles=SingleParticle(),
 eigenstates = H.solve(max_states=30)
 
 print(eigenstates.energies)
+
+visualization = init_visualization(eigenstates)
+visualization.slider_plot()
 
 
 
