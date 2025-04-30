@@ -39,11 +39,14 @@ class Potential:
         return pits
 
     def get_potential(self, x: float) -> float:
-        if abs(x) > WP.dx * (WP.nx/2 - 1):
-            return 1e15
+        # if abs(x) > WP.dx * (WP.nx/2 - 1):
+        #     return 1e15
+        #
+        # for i, pit in enumerate(self.pits):
+        #     if abs(x - pit.x) < pit.length/2:
+        #         return -pit.depth
+        #
+        # return 0
 
-        for i, pit in enumerate(self.pits):
-            if abs(x - pit.x) < pit.length/2:
-                return -pit.depth
-
-        return 0
+        k = 100. * WP.eV / WP.Å ** 2
+        return 0.5 * k * particle.x ** 2
