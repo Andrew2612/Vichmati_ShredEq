@@ -50,9 +50,9 @@ from .single_particle_visualization import VisualizationSingleParticle1D
 from Models.eigenstates import Eigenstates
 
 
-def init_eigenstate_visualization(eigenstates):
+def init_eigenstate_visualization(eigenstates,potential):
     if eigenstates.type == "SingleParticle1D":
-        return VisualizationSingleParticle1D(eigenstates)
+        return VisualizationSingleParticle1D(eigenstates,potential)
 
     # elif eigenstates.type == "SingleParticle2D":
     #     return VisualizationSingleParticle2D(eigenstates)
@@ -88,10 +88,10 @@ def init_eigenstate_visualization(eigenstates):
 #         return TimeVisualizationTwoIdenticalParticles1D(simulation)
 
 
-def init_visualization(argument):
+def init_visualization(argument,potential):
     if isinstance(argument, Eigenstates):
         eigenstates = argument
-        return init_eigenstate_visualization(eigenstates)
+        return init_eigenstate_visualization(eigenstates,potential)
 
     # elif isinstance(argument, TimeSimulation):
     #     simulation = argument

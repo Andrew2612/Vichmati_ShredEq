@@ -42,7 +42,7 @@ class Hamiltonian:
                 V = 0.
                 return V
             else:
-                V = self.potential(self.particle_system)
+                V = self.potential(self.particle_system.x)
                 self.Vgrid = V
                 self.E_min = np.amin(V)
                 V = V.reshape(self.N ** self.ndim)
@@ -50,7 +50,7 @@ class Hamiltonian:
                 return V
 
         elif self.potential_type == "matrix":
-            V = self.potential(self.particle_system)
+            V = self.potential(self.particle_system.x)
             self.Vgrid = np.real((V).diagonal().reshape(*([self.N] * self.ndim)) + self.E_min)
 
             # Note: Vgrid when potential_type == "matrix" is only used for visualization.

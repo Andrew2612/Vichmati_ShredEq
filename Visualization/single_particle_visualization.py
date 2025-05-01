@@ -7,8 +7,9 @@ from Models.world_parametrs import WorldParameters as WP
 
 
 class VisualizationSingleParticle1D(Visualization):
-    def __init__(self, eigenstates):
+    def __init__(self, eigenstates,potential):
         self.eigenstates = eigenstates
+        self.potential=potential
 
     def plot_eigenstate(self, k, xlim=None, show_imaginary_part=False):
         eigenstates_array = self.eigenstates.array
@@ -51,6 +52,7 @@ class VisualizationSingleParticle1D(Visualization):
             ax2.plot([0, 1], [E, E], color='gray', alpha=0.5)
 
         ax2.plot([0, 1], [energies[k], energies[k]], color='yellow', lw=3)
+        plt.legend()
         plt.show()
 
     def slider_plot(self, xlim=None, show_imaginary_part=False):
@@ -85,13 +87,15 @@ class VisualizationSingleParticle1D(Visualization):
 
         x = np.linspace(-self.eigenstates.extent / 2, self.eigenstates.extent / 2, self.eigenstates.N)
 
+
         if show_imaginary_part == True:
             eigenstate_plot1, = ax1.plot(x / WP.Å, np.real(eigenstates_array[0]), label='$Re|\\psi(x)|$')
             eigenstate_plot2, = ax1.plot(x / WP.Å, np.imag(eigenstates_array[0]), label='$Im|\\psi(x)|$')
             eigenstate_plot3, = ax1.plot(x / WP.Å, np.abs(eigenstates_array[0]), label='$|\\psi(x)|$', color='white')
             ax1.legend()
         else:
-            eigenstate_plot, = ax1.plot(x / WP.Å, np.real(eigenstates_array[0]))
+            eigenstate_plot = ax1.plot(x / WP.Å, np.real(eigenstates_array[0]))
+        ax1.plot(x/WP.Å,self.potential(x)*max(abs(ymin),abs(ymax))/np.amax(np.abs(self.potential(x))))
 
         line = ax2.plot([0, 1], [energies[1], energies[1]], color='yellow', lw=3)
 
@@ -115,7 +119,7 @@ class VisualizationSingleParticle1D(Visualization):
                 eigenstate_plot2.set_ydata(np.imag(eigenstates_array[state]))
                 eigenstate_plot3.set_ydata(np.abs(eigenstates_array[state]))
             else:
-                eigenstate_plot.set_ydata(np.real(eigenstates_array[state]))
+                eigenstate_plot[0].set_ydata(np.real(eigenstates_array[state]))
 
             line[0].set_ydata([energies[state], energies[state]])
 

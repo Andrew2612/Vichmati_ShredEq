@@ -5,6 +5,11 @@ from scipy.sparse import eye
 from .abstract_particle_system import AbstractParticleSystem
 from .world_parametrs import WorldParameters as WP
 from .eigenstates import Eigenstates
+# from ..main import eigenstates
+
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2 * h)
+
 
 
 class SingleParticle(AbstractParticleSystem):
@@ -143,6 +148,15 @@ class SingleParticle(AbstractParticleSystem):
 
         # Finish the normalization of the eigenstates
         eigenstates_array = eigenstates_array / np.sqrt(H.dx ** H.ndim)
+        # проверка что энергии лежат ниже пределов потенциала на бесконечности
+        F=min(abs(derivative(H.potential,H.extent/2)),abs(derivative(H.potential,-H.extent/2)))
+        if F < 1e-5:
+            Emax=max(H.potential(H.extent/2),H.potential(-H.extent/2))
+            mask=energies<=Emax
+            energies=energies[mask]
+            eigenstates_array=eigenstates_array[mask]
+
+
 
         if H.spatial_ndim == 1:
             type = "SingleParticle1D"
