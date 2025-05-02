@@ -1,13 +1,16 @@
 import numpy as np
 
 class Potential:
+    def __init__(self):
+        self.potential=None
     @staticmethod
     def choose_potential():
         @staticmethod
         def choose_oscillator(omega):
             def oscillator(x):
                 return 0.5 * 1 * (omega ** 2) * x ** 2
-
+            Potential.potential_type="oscillator"
+            Potential.omega=omega
             return oscillator
 
         @staticmethod
@@ -16,16 +19,21 @@ class Potential:
                 # a = 1
                 # U0 = 14 / 2
                 return -U0 / (np.cosh(x / a)) ** 2
-
+            Potential.potential_type = "sech2"
+            Potential.U0=U0
+            Potential.a=a
             return sech2
 
         @staticmethod
-        def choose_linear(a):
+        def choose_linear(F):
             def linear(x):
                 if type(x) == float:
-                    return a*x if x > 0 else -a*x
+                    return F*x if x > 0 else -F*x
 
-                return np.where(x > 0, a*x, -a*x)
+                return np.where(x > 0, F*x, -F*x)
+
+            Potential.potential_type = "linear"
+            Potential.F=F
 
             return linear
 
@@ -42,9 +50,9 @@ class Potential:
             choosen_U0 = float(input())
             chosen_potential = choose_sech2(choosen_a, choosen_U0)
         elif inp == "3":
-            print("Введите коэффициент наклона a>0")
-            choosen_a = abs(float(input()))
-            chosen_potential = choose_linear(choosen_a)
+            print("Введите силу F>0")
+            chosen_F = abs(float(input()))
+            chosen_potential = choose_linear(chosen_F)
         else:
             raise Exception("No potential chosen")
 
