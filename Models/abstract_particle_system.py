@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from Models.hamiltonian import Hamiltonian
 
 class AbstractParticleSystem(ABC):
     @abstractmethod
@@ -7,13 +7,17 @@ class AbstractParticleSystem(ABC):
         pass
 
     @abstractmethod
-    def get_observables(self, H):
+    def get_observables(self, H: Hamiltonian):
         pass
 
     @abstractmethod
-    def get_kinetic_matrix(self, H):
+    def build_matrix_operators(self, H: Hamiltonian):
         pass
 
     @abstractmethod
-    def get_eigenstates(self, H, max_states, eigenvalues, eigenvectors):
+    def get_kinetic_matrix(self, H: Hamiltonian):
+        pass
+
+    @abstractmethod
+    def get_eigenstates(self, H: Hamiltonian, max_states, eigenvalues, eigenvectors):
         pass
