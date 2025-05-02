@@ -4,18 +4,25 @@ from Systems.single_particle import SingleParticle
 from Visualization.single_particle_visualization import VisualizationSingleParticle1D
 from Systems.potential import Potential
 
-potential = Potential.choose_potential()
 
-H = Hamiltonian(particles=SingleParticle(),
-                potential=potential,
-                N=512, extent=20*WP.Å)
+def main():
+    potential = Potential.choose_potential()
 
-eigenstates = H.solve(max_states=30)
+    H = Hamiltonian(particles=SingleParticle(),
+                    potential=potential,
+                    N=512, extent=20*WP.Å)
 
-print(eigenstates.energies)
+    eigenstates = H.solve(max_states=30)
 
-visualization = VisualizationSingleParticle1D(eigenstates, potential)
-visualization.slider_plot()
+    print(eigenstates.energies)
+
+    if len(eigenstates.energies) == 0:
+        print("No states found")
+        return
+
+    visualization = VisualizationSingleParticle1D(eigenstates, potential)
+    visualization.slider_plot()
 
 
-
+if __name__ == "__main__":
+    main()

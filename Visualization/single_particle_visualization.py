@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
 from Visualization.abstract_visualization import Visualization
 from Models.world_parametrs import WorldParameters as WP
 
@@ -44,25 +43,28 @@ class VisualizationSingleParticle1D(Visualization):
         eigenstate_plot = ax1.plot(x / WP.Å, np.real(eigenstates_array[0]))
         ax1.plot(x/WP.Å,self.potential(x)*max(abs(ymin),abs(ymax))/np.amax(np.abs(self.potential(x))))
 
-        line = ax2.plot([0, 1], [energies[1], energies[1]], color='yellow', lw=3)
+        line = ax2.plot([0, 1], [energies[0], energies[0]], color='yellow', lw=3)
 
         plt.subplots_adjust(bottom=0.2)
-        from matplotlib.widgets import Slider
-        slider_ax = plt.axes([0.2, 0.05, 0.7, 0.05])
-        slider = Slider(slider_ax,  # the axes object containing the slider
-                        'state',  # the name of the slider parameter
-                        0,  # minimal value of the parameter
-                        len(eigenstates_array) - 1,  # maximal value of the parameter
-                        valinit=0,  # initial value of the parameter
-                        valstep=1,
-                        color='#5c05ff'
-                        )
 
-        def update(state):
-            state = int(state)
-            eigenstate_plot[0].set_ydata(np.real(eigenstates_array[state]))
+        if len(eigenstates_array) > 1:
+            from matplotlib.widgets import Slider
+            slider_ax = plt.axes([0.2, 0.05, 0.7, 0.05])
+            slider = Slider(slider_ax,  # the axes object containing the slider
+                            'state',  # the name of the slider parameter
+                            0,  # minimal value of the parameter
+                            len(eigenstates_array) - 1,  # maximal value of the parameter
+                            valinit=0,  # initial value of the parameter
+                            valstep=1,
+                            color='#5c05ff'
+                            )
 
-            line[0].set_ydata([energies[state], energies[state]])
+            def update(state):
+                state = int(state)
+                eigenstate_plot[0].set_ydata(np.real(eigenstates_array[state]))
 
-        slider.on_changed(update)
+                line[0].set_ydata([energies[state], energies[state]])
+
+            slider.on_changed(update)
+
         plt.show()

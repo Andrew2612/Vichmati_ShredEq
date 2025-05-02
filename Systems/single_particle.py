@@ -6,13 +6,11 @@ from Models.world_parametrs import WorldParameters as WP
 from Models.eigenstates import Eigenstates
 
 
-def derivative(f, x, h=1e-5):
-    return (f(x + h) - f(x - h)) / (2 * h)
-
-
 class SingleParticle(AbstractParticleSystem):
-    def __init__(self, m=WP.m_e, spin=None):
-        self.m = m
+    def __init__(self, spin=None):
+        print("Введите массу частицы")
+        choosen_m = float(input())
+        self.m = choosen_m
         self.spin = spin
 
     def get_observables(self, H):
@@ -36,12 +34,16 @@ class SingleParticle(AbstractParticleSystem):
 
         eigenstates_array = eigenstates_array / np.sqrt(H.dx)
         # проверка что энергии лежат ниже пределов потенциала на бесконечности
-        F = min(abs(derivative(H.potential,H.extent/2)),abs(derivative(H.potential, -H.extent/2)))
+        F = min(abs(self.derivative(H.potential, H.extent/2)), abs(self.derivative(H.potential, -H.extent/2)))
         if F < 1e-5:
-            Emax = max(H.potential(H.extent/2),H.potential(-H.extent/2))
+            Emax = max(H.potential(H.extent/2), H.potential(-H.extent/2))
             mask = energies <= Emax
             energies = energies[mask]
             eigenstates_array = eigenstates_array[mask]
 
         eigenstates = Eigenstates(energies / WP.eV, eigenstates_array, H.extent, H.N)
         return eigenstates
+
+
+    def derivative(self, f, x, h=1e-5):
+        return (f(x + h) - f(x - h)) / (2 * h)

@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Potential:
     @staticmethod
     def choose_potential():
@@ -20,7 +19,17 @@ class Potential:
 
             return sech2
 
-        print("Выберите тип потенциала: 1 - осциллятор, 2 - sech2")
+        @staticmethod
+        def choose_linear(a):
+            def linear(x):
+                if type(x) == float:
+                    return a*x if x > 0 else -a*x
+
+                return np.where(x > 0, a*x, -a*x)
+
+            return linear
+
+        print("Выберите тип потенциала: 1 - осциллятор, 2 - sech2, 3 - линейный")
         inp = input()
         if inp == "1":
             print("Введите частоту осциллятора в атомных единицах")
@@ -32,6 +41,10 @@ class Potential:
             print("Введите глубину потенциала U0 в атомных единицах")
             choosen_U0 = float(input())
             chosen_potential = choose_sech2(choosen_a, choosen_U0)
+        elif inp == "3":
+            print("Введите коэффициент наклона a>0")
+            choosen_a = abs(float(input()))
+            chosen_potential = choose_linear(choosen_a)
         else:
             raise Exception("No potential chosen")
 
